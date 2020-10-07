@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { deviceRegister } from './device';
+
+deviceRegister();
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

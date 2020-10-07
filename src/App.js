@@ -1,26 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { cameraFeatures } from './camera';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+export default class App extends React.Component {
+  state = {
+    persons: []
+  }
+
+  render() {
+    return (
+      <div style={{ marginLeft: '100px' }}>
+        <h1>Camera access</h1>
+        <div>
+          <video autoPlay style={{ maxWidth: '30%', height: 'auto', border: 'solid ', borderWidth: '1px' }}></video>
+        </div>
+        <div style={{ marginTop: '20px' }}>
+          <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
+            <button onClick={() => {
+              cameraFeatures.open(cameraError => {
+                console.log(JSON.stringify(cameraError));
+              });
+            }}>Open</button>
+          </div>
+          <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
+            <button onClick={() => {
+              cameraFeatures.takeShot('selfie64_1', snapshotError => {
+                console.log(JSON.stringify(snapshotError));
+              });
+            }}>Shot</button>
+          </div>
+          <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
+            <button onClick={cameraFeatures.close}>Close</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
-
-export default App;
