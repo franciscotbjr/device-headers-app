@@ -1,4 +1,4 @@
-class CameraErros {
+class CameraErrors {
     constructor() {
         this.noDeviceAvailable = {name: 'NoDeviceAvailable', code: 1};
         this.permissionDenied = {name: 'PermissionDenied', code: 2};
@@ -27,7 +27,7 @@ class CameraErros {
     }
 }
 
-const CAMERA_ERRORS = new CameraErros();
+const CAMERA_ERRORS = new CameraErrors();
 
 Object.freeze(CAMERA_ERRORS);
 
