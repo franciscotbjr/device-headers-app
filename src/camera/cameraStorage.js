@@ -1,4 +1,4 @@
-import { sessionStorage } from '../storage'
+import { sessionStorage } from '../storage';
 
 const CAMERA_SHOTS_PREFIX = "al-camera-shot_";
 
