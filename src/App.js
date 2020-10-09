@@ -3,8 +3,11 @@ import { cameraFeatures } from './camera';
 
 
 export default class App extends React.Component {
+
   state = {
-    persons: []
+    camerasAvailable: {},
+    currentCamera: 'front',
+    openFrontCamera: true
   }
 
   render() {
@@ -18,6 +21,7 @@ export default class App extends React.Component {
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
               cameraFeatures.open(cameras => {
+                state.camerasAvailable = cameras;
                 console.log(cameras);
               }, 
               cameraError => {
@@ -34,6 +38,20 @@ export default class App extends React.Component {
           </div>
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={cameraFeatures.close}>Close</button>
+          </div>
+          <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
+            <button onClick={() => {
+              if(state.currentCamera === 'front') {
+                state.currentCamera = 'back';
+              } else {
+                state.currentCamera = 'front';
+              }
+              cameraFeatures.change(
+                state.camerasAvailable[state.currentCamera], 
+                cameraError => {
+                  console.log(JSON.stringify(cameraError));
+                });
+            }}>Cnage</button>
           </div>
         </div>
       </div>
