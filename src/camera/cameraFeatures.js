@@ -1,23 +1,26 @@
-import CAMERA_ERRORS from './cameraErrors';
 import { addCameraShot } from './cameraStorage'
-import { hasGetUserMedia, startByConstraints, handleError, handleSuccess, hdConstraints, vgaConstraints, getVideoElement, createSnapshot } from './cameraHelpers'
+import { handleError, handleSuccess, getVideoElement, createSnapshot, getAsBestResolution, requestCameras } from './cameraHelpers'
+
+
+async function applyCamera(camera, errorCallback) {
+    try {
+        closeCamera();
+        const result = await getAsBestResolution(camera, errorCallback);
+        if (result.stream) {
+            handleSuccess(result.stream);
+        }
+    } catch (error) {
+        handleError(error, errorCallback);
+    }
+}
 
 async function openCamera(errorCallback) {
     let result = undefined;
     try {
-        closeCamera();
-        if (hasGetUserMedia()) {
-            result = await startByConstraints(errorCallback, hdConstraints);
-            if (result.error
-                && !CAMERA_ERRORS.isPermissionDenied(result.error.code)) {
-                result = await startByConstraints(errorCallback, vgaConstraints);
-            }
-            if (!result.error) {
-                handleSuccess(result.stream);
-            }
-
-        } else {
-            errorCallback(CAMERA_ERRORS.noDeviceAvailable);
+        const cameras = await requestCameras(errorCallback);
+        if(cameras.front) {
+            result = cameras;
+            await applyCamera(cameras.front, errorCallback);
         }
     } catch (error) {
         handleError(error, errorCallback);
@@ -50,6 +53,7 @@ const cameraFeatures = {
     open: openCamera,
     close: closeCamera,
     takeShot: takeCameraShot,
+    change: applyCamera,
 };
 
 export default cameraFeatures;

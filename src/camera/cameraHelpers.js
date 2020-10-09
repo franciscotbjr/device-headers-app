@@ -1,31 +1,68 @@
 import CAMERA_ERRORS from './cameraErrors';
 
 const IMAGE_MAX_SIZE = Math.floor(1024 * 1000 * 2);
-const RESIZE_TARGET = Math.floor(IMAGE_MAX_SIZE * 0.9);
 
-export const hdConstraints = {
+const hdConstraints = {
     video: { width: { min: 1280 }, height: { min: 720 } },
     audio: false,
 }
 
-export const vgaConstraints = {
+const vgaConstraints = {
     video: { width: { exact: 640 }, height: { exact: 480 } },
     audio: false,
 }
 
-export async function startByConstraints(errorCallback, constraint = { video: true, audio: false }) {
-    const result = {};
+export async function getAsBestResolution(camera, errorCallback) {
+    let result = undefined;
     try {
-        result.stream = await navigator.mediaDevices.getUserMedia(constraint);
+        let constraint = {
+            exact: camera.deviceId,
+            ...hdConstraints
+        };
+        result = await startByConstraints(errorCallback, constraint);
+        if (result.error
+            && !CAMERA_ERRORS.isPermissionDenied(result.error.code)) {
+            constraint = {
+                exact: camera.deviceId,
+                ...vgaConstraints
+            };
+            result = await startByConstraints(errorCallback, constraint);
+        }
     } catch (error) {
-        result.error = handleError(error, errorCallback);
+        handleError(error, errorCallback);
     }
     return result;
 }
 
-export function hasGetUserMedia() {
-    return !!(navigator.mediaDevices &&
-        navigator.mediaDevices.getUserMedia);
+export async function requestCameras(errorCallback) {
+    const cameras = {
+        front: undefined,
+        back: undefined,
+    };
+    try {
+        if (hasGetUserMedia()) {
+            await navigator.mediaDevices.enumerateDevices()
+                .then(medias => {
+                    const videoCams = medias.filter(media => { 
+                        return media.kind === 'videoinput';
+                     });
+                    if(videoCams.length === 1) {
+                        cameras.front = videoCams[0];
+                    } else if(videoCams.length >= 2) {
+                        cameras.front = videoCams[1];
+                        cameras.back = videoCams[0];
+                    }
+                })
+                .catch(error => {
+                    handleError(error, errorCallback);
+                });
+        } else {
+            errorCallback(CAMERA_ERRORS.noDeviceAvailable);
+        }
+    } catch (error) {
+        handleError(error, errorCallback);
+    }
+    return cameras;
 }
 
 export function handleSuccess(stream) {
@@ -67,6 +104,21 @@ export function createSnapshot(errorCallback) {
         errorCallback(CAMERA_ERRORS.failToCreateSnapshot);
     }
     return snapshot;
+}
+
+function hasGetUserMedia() {
+    return !!(navigator.mediaDevices &&
+        navigator.mediaDevices.getUserMedia);
+}
+
+async function startByConstraints(errorCallback, constraint = { video: true, audio: false }) {
+    const result = {};
+    try {
+        result.stream = await navigator.mediaDevices.getUserMedia(constraint);
+    } catch (error) {
+        result.error = handleError(error, errorCallback);
+    }
+    return result;
 }
 
 function isResizeRequired(snapshot) {
