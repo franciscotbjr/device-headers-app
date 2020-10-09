@@ -6,8 +6,6 @@ const App = () => {
 
   const [camerasAvailable, setCamerasAvailable] = useState({});
   const [currentCamera, setCurrentCamera] = useState('front');
-  const [openFrontCamera, setOpenFrontCamera] = useState(true);
-
     return (
       <div style={{ marginLeft: '100px' }}>
         <h1>Camera access</h1>
@@ -38,13 +36,16 @@ const App = () => {
           </div>
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
+              let cam = currentCamera;
               if(currentCamera === 'front') {
-                setCurrentCamera('back');
+                  cam = 'back';
+                setCurrentCamera(cam);
               } else {
-                setCurrentCamera('front');
+                  cam = 'front';
+                setCurrentCamera(cam);
               }
               cameraFeatures.change(
-                camerasAvailable[currentCamera], 
+                camerasAvailable[cam], 
                 cameraError => {
                   console.log(JSON.stringify(cameraError));
                 });

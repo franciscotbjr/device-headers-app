@@ -15,18 +15,10 @@ const vgaConstraints = {
 export async function getAsBestResolution(camera, errorCallback) {
     let result = undefined;
     try {
-        let constraint = {
-            exact: camera.deviceId,
-            ...hdConstraints
-        };
-        result = await startByConstraints(errorCallback, constraint);
+        result = await startByConstraints(errorCallback, createConstraint(hdConstraints, camera));
         if (result.error
             && !CAMERA_ERRORS.isPermissionDenied(result.error.code)) {
-            constraint = {
-                exact: camera.deviceId,
-                ...vgaConstraints
-            };
-            result = await startByConstraints(errorCallback, constraint);
+            result = await startByConstraints(errorCallback, createConstraint(vgaConstraints, camera));
         }
     } catch (error) {
         handleError(error, errorCallback);
@@ -104,6 +96,14 @@ export function createSnapshot(errorCallback) {
         errorCallback(CAMERA_ERRORS.failToCreateSnapshot);
     }
     return snapshot;
+}
+
+function createConstraint(baseConstraint, camera) {
+    let constraint = {
+        ...baseConstraint
+    };
+    constraint.video.deviceId = { exact: camera.deviceId };
+    return constraint;
 }
 
 function hasGetUserMedia() {
