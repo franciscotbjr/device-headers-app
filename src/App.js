@@ -17,7 +17,10 @@ export default class App extends React.Component {
         <div style={{ marginTop: '20px' }}>
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
-              cameraFeatures.open(cameraError => {
+              cameraFeatures.open(cameras => {
+                console.log(cameras);
+              }, 
+              cameraError => {
                 console.log(JSON.stringify(cameraError));
               });
             }}>Open</button>

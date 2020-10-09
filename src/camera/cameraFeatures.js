@@ -14,18 +14,16 @@ async function applyCamera(camera, errorCallback) {
     }
 }
 
-async function openCamera(errorCallback) {
-    let result = undefined;
+async function openCamera(camerasCallback, errorCallback) {
     try {
         const cameras = await requestCameras(errorCallback);
         if(cameras.front) {
-            result = cameras;
+            camerasCallback(cameras);
             await applyCamera(cameras.front, errorCallback);
         }
     } catch (error) {
         handleError(error, errorCallback);
     }
-    return result;
 }
 
 function closeCamera() {
