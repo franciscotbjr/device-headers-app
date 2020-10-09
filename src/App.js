@@ -1,16 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { cameraFeatures } from './camera';
 
 
-export default class App extends React.Component {
+const App = () => {
 
-  state = {
-    camerasAvailable: {},
-    currentCamera: 'front',
-    openFrontCamera: true
-  }
+  const [camerasAvailable, setCamerasAvailable] = useState({});
+  const [currentCamera, setCurrentCamera] = useState('front');
+  const [openFrontCamera, setOpenFrontCamera] = useState(true);
 
-  render() {
     return (
       <div style={{ marginLeft: '100px' }}>
         <h1>Camera access</h1>
@@ -21,7 +18,7 @@ export default class App extends React.Component {
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
               cameraFeatures.open(cameras => {
-                state.camerasAvailable = cameras;
+                setCamerasAvailable(cameras);
                 console.log(cameras);
               }, 
               cameraError => {
@@ -41,20 +38,22 @@ export default class App extends React.Component {
           </div>
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
-              if(state.currentCamera === 'front') {
-                state.currentCamera = 'back';
+              if(currentCamera === 'front') {
+                setCurrentCamera('back');
               } else {
-                state.currentCamera = 'front';
+                setCurrentCamera('front');
               }
               cameraFeatures.change(
-                state.camerasAvailable[state.currentCamera], 
+                camerasAvailable[currentCamera], 
                 cameraError => {
                   console.log(JSON.stringify(cameraError));
                 });
-            }}>Cnage</button>
+            }}>Change</button>
           </div>
         </div>
       </div>
     )
-  }
 }
+
+
+export default App;
