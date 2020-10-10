@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 import { durableStorage } from '../storage';
 
 const DEVICE_ID_KEY = 'gcs_al_device';
-const DUMMY_ID = '0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a';
+const DUMMY_ID = '0d0u0m0m-0y0d-0e0v-0i0c-0e0i0d0d0d0i';
 
 export function getDeviceId() {
   let deviceId = DUMMY_ID
