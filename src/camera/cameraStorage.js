@@ -3,7 +3,11 @@ import { sessionStorage } from '../storage';
 const CAMERA_SHOTS_PREFIX = "al-camera-shot_";
 
 export function addCameraShot(shotId, shot) {
-    sessionStorage.setItem(getCameraItemId(shotId), shot)
+    try {
+        sessionStorage.setItem(getCameraItemId(shotId), shot)
+    } catch (error) {
+        alert(JSON.stringify(error));        
+    }
 }
 
 function getCameraShot(shotId) {

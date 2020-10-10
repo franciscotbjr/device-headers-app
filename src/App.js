@@ -6,6 +6,7 @@ const App = () => {
 
   const [camerasAvailable, setCamerasAvailable] = useState({});
   const [currentCamera, setCurrentCamera] = useState('front');
+  const [imageCount, setImageCount] = useState(1);
     return (
       <div style={{ marginLeft: '100px' }}>
         <h1>Camera access</h1>
@@ -26,7 +27,8 @@ const App = () => {
           </div>
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
-              cameraFeatures.takeShot('selfie64_1', snapshotError => {
+              setImageCount(imageCount + 1);
+              cameraFeatures.takeShot(`selfie64_${imageCount}`, snapshotError => {
                 console.log(JSON.stringify(snapshotError));
               });
             }}>Shot</button>
