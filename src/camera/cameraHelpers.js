@@ -174,5 +174,5 @@ function byteCount(snapshot) {
 }
 
 function clearSnapshot(snapshot) {
-  return snapshot.replace('data:image/png;base64,', '');
+  return snapshot.replace('data:image/jpeg;base64,', '');
 }
