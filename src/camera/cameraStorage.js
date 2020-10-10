@@ -1,17 +1,16 @@
 import { sessionStorage } from '../storage';
+import {
+    handleError
+  } from './cameraHelpers';
 
 const CAMERA_SHOTS_PREFIX = "al-camera-shot_";
 
-function byteCount(snapshot) {
-    return snapshot.split(/%..|./).length - 1;
-}
-
-export function addCameraShot(shotId, shot) {
+export function addCameraShot(shotId, shot, { successCallback, errorCallback }) {
     try {
-        alert(byteCount(shot));
         sessionStorage.setItem(getCameraItemId(shotId), shot)
+        successCallback(shotId);
     } catch (error) {
-        alert(JSON.stringify(error));
+        handleError(error, errorCallback);
     }
 }
 

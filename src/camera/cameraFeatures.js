@@ -49,8 +49,10 @@ function takeCameraShot(shotId, successCallback, errorCallback) {
   try {
     const snapshot = createSnapshot(errorCallback);
     if (snapshot) {
-      successCallback(shotId);
-      addCameraShot(shotId, snapshot);
+      addCameraShot(shotId, snapshot, { 
+        successCallback,
+        errorCallback
+      });
     }
   } catch (error) {
     handleError(error, errorCallback);

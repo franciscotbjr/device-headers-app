@@ -4,6 +4,7 @@ class CameraErrors {
         this.permissionDenied = {name: 'PermissionDenied', code: 2};
         this.constraintNotSatisfied = {name: 'ConstraintNotSatisfied', code: 3};
         this.failToCreateSnapshot = {name: 'failToCreateSnapshot', code: 4};
+        this.quotaExceededError = {name: 'QuotaExceededError', code: 5};
     }
 
     isNoDeviceAvailable = (code) => {
@@ -24,6 +25,10 @@ class CameraErrors {
 
     isFailToCreateSnapshot = (code) => {
         return this.failToCreateSnapshot.code === code;
+    }
+
+    isQuotaExceededError  = (code) => {
+        return this.quotaExceededError.code === code;
     }
 }
 

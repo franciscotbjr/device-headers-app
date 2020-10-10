@@ -28,7 +28,9 @@ const App = () => {
           <div style={{ margin: '5px 5px 5px 5px', display: 'inline' }}>
             <button onClick={() => {
               setImageCount(imageCount + 1);
-              cameraFeatures.takeShot(`selfie64_${imageCount}`, snapshotError => {
+              cameraFeatures.takeShot(`selfie64_${imageCount}`, imageId => {
+                console.log(imageCount);
+              }, snapshotError => {
                 console.log(JSON.stringify(snapshotError));
               });
             }}>Shot</button>

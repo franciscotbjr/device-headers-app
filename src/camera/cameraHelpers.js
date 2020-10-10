@@ -84,6 +84,11 @@ export function handleError(error, errorCallback) {
   ) {
     cameraError = CAMERA_ERRORS.permissionDenied;
     errorCallback(cameraError);
+  } else if (
+    error.name === 'QuotaExceededError'
+      ) {
+    cameraError = CAMERA_ERRORS.quotaExceededError;
+    errorCallback(cameraError);
   }
   return cameraError;
 }
