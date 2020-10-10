@@ -1,6 +1,9 @@
 import CAMERA_ERRORS from './cameraErrors';
 
-const IMAGE_MAX_SIZE = Math.floor(1024 * 1000);
+const IMAGE_MAX_SIZE = Math.floor(1024 * 1000 * 2);
+const IMAGE_QUALITY = 0.9;
+const IMAGE_TYPE = 'image/jpeg';
+const CONTEXT_TYPE = '2d';
 
 const hdConstraints = {
   video: { width: { min: 1280 }, height: { min: 720 } },
@@ -96,7 +99,7 @@ export function createSnapshot(errorCallback) {
     const canvas = document.createElement('canvas');
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
-    canvas.getContext('2d').drawImage(videoElement, 0, 0);
+    canvas.getContext(CONTEXT_TYPE).drawImage(videoElement, 0, 0);
     snapshot = getImage(canvas);
     if (snapshot) {
       snapshot = clearSnapshot(snapshot);
@@ -111,7 +114,7 @@ export function createSnapshot(errorCallback) {
 }
 
 function getImage(canvas) {
-    return canvas.toDataURL('image/jpeg', 1.0);
+    return canvas.toDataURL(IMAGE_TYPE, IMAGE_QUALITY);
 }
 
 function createConstraint(baseConstraint, camera) {
@@ -154,7 +157,7 @@ function resizeSnapshot(canvas, snapshot, errorCallback) {
     newCanvas.width = canvas.width * percentResize;
     newCanvas.height = canvas.height * percentResize;
 
-    const newCanvasCtx = newCanvas.getContext('2d');
+    const newCanvasCtx = newCanvas.getContext(CONTEXT_TYPE);
 
     newCanvasCtx.drawImage(canvas, 0, 0, newCanvas.width, newCanvas.height);
 
@@ -174,5 +177,5 @@ function byteCount(snapshot) {
 }
 
 function clearSnapshot(snapshot) {
-  return snapshot.replace('data:image/jpeg;base64,', '');
+  return snapshot.replace(`data:${IMAGE_TYPE};base64,`, '');
 }
