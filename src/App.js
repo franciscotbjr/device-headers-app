@@ -29,7 +29,7 @@ const App = () => {
             <button onClick={() => {
               setImageCount(imageCount + 1);
               cameraFeatures.takeShot(`selfie64_${imageCount}`, imageId => {
-                console.log(imageCount);
+                console.log(`selfie64_${imageCount}`);
               }, snapshotError => {
                 console.log(JSON.stringify(snapshotError));
               });
