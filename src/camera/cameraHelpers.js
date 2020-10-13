@@ -106,7 +106,6 @@ export function createSnapshot(errorCallback) {
     snapshot = getImage(canvas);
     if (snapshot) {
       snapshot = clearSnapshot(snapshot);
-      alert(`byteCount(snapshot) = ${byteCount(snapshot)}`);
       if (isResizeRequired(snapshot)) {
         snapshot = resizeSnapshot(canvas, snapshot, errorCallback);
       }
