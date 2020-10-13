@@ -19,7 +19,7 @@ export async function getAsBestResolution(camera, errorCallback) {
   let result = undefined;
   try {
     result = await startByConstraints(
-      errorCallback,
+      undefined,
       createConstraint(hdConstraints, camera)
     );
     if (result.error && !CAMERA_ERRORS.isPermissionDenied(result.error.code)) {
@@ -77,19 +77,17 @@ export function handleError(error, errorCallback) {
     error.name === 'ConstraintNotSatisfiedError'
   ) {
     cameraError = CAMERA_ERRORS.constraintNotSatisfied;
-    errorCallback(cameraError);
   } else if (
     error.name === 'NotAllowedError' ||
     error.name === 'PermissionDeniedError'
   ) {
     cameraError = CAMERA_ERRORS.permissionDenied;
-    errorCallback(cameraError);
   } else if (
     error.name === 'QuotaExceededError'
       ) {
     cameraError = CAMERA_ERRORS.quotaExceededError;
-    errorCallback(cameraError);
   }
+  executeSafeErrorCallback(errorCallback, cameraError);
   return cameraError;
 }
 
@@ -116,6 +114,12 @@ export function createSnapshot(errorCallback) {
     errorCallback(CAMERA_ERRORS.failToCreateSnapshot);
   }
   return snapshot;
+}
+
+function executeSafeErrorCallback(errorCallback, cameraError) {
+  if (typeof errorCallback === 'function' && cameraError) {
+    errorCallback(cameraError);
+  }
 }
 
 function getImage(canvas) {

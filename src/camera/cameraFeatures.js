@@ -8,14 +8,14 @@ import {
   requestCameras,
 } from './cameraHelpers';
 
-async function applyCamera(camera, errorCallback, sucessCalbak) {
+async function applyCamera(camera, errorCallback, successCallback) {
   try {
     closeCamera();
     const result = await getAsBestResolution(camera, errorCallback);
     if (result.stream) {
       handleSuccess(result.stream);
-      if (typeof sucessCalbak === 'function') {
-        sucessCalbak(result.stream);
+      if (typeof successCallback === 'function') {
+        successCallback(result.stream);
       }
     }
   } catch (error) {
