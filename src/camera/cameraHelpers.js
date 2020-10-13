@@ -1,7 +1,7 @@
 import CAMERA_ERRORS from './cameraErrors';
 
-const IMAGE_MAX_SIZE = Math.floor(1024 * 1000 * 2);
-const IMAGE_QUALITY = 0.9;
+const IMAGE_MAX_SIZE = Math.floor(1024 * 1000);
+const IMAGE_QUALITY = 0.8;
 const IMAGE_TYPE = 'image/jpeg';
 const CONTEXT_TYPE = '2d';
 
@@ -106,6 +106,7 @@ export function createSnapshot(errorCallback) {
     snapshot = getImage(canvas);
     if (snapshot) {
       snapshot = clearSnapshot(snapshot);
+      console.log(`byteCount(snapshot) = ${byteCount(snapshot)}`);
       if (isResizeRequired(snapshot)) {
         snapshot = resizeSnapshot(canvas, snapshot, errorCallback);
       }
